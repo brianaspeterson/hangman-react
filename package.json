@@ -1,0 +1,30 @@
+{
+  "name": "briana-hangman-react",
+  "version": "0.0.0",
+  "description": "Code for hangman with react",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianaspeterson/hangman-react"
+  },
+  "keywords": [
+    "hangman",
+    "tutorial",
+    "react",
+    "example"
+  ],
+  "author": "brianapeterson",
+  "homepage": "https://github.com/brianaspeterson/hangman-react",
+  "engines" : {
+    "node" : "0.12.x"
+  }
+}
