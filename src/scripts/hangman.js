@@ -83,9 +83,9 @@ var NewGameDetails = React.createClass({
   		var gameData = this.props.data;
 
 		e.preventDefault();
-		var guess = this.state.guess; //TODO: sanitize email to make sure its valid format
+		var guess = this.state.guess; 
 		if(!guess){
-			return; //TODO :make something come up when no email
+			return; 
 		}
 		this.props.onLetterSubmit({guess: guess}, gameData);
 		this.setState({guess: ''});
@@ -100,13 +100,9 @@ var NewGameDetails = React.createClass({
 			<div>
 		<div className="newGameDetails">
 		<h2>New Game Below</h2>
-		<p>{gameData.game_key}</p>
-		<p>{gameData.phrase}</p>
-		<p>{gameData.num_tries_left}</p>
-		<p>{gameData.state}</p>
 		</div>
 		<form className="letterForm" onSubmit={this.handleSubmit}>
-				<input type="text" name="guess" placeholder="letter(a-z)" value={this.state.guess} onChange={this.handleLetterChange} required />
+				<input type="text" name="guess" placeholder="letter(a-z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
 				<input type="submit" value="Post" />
 			</form>
 		</div>
@@ -129,27 +125,34 @@ var DisplayPhrase = React.createClass({
 	
 	render: function(){
 	var letterData = this.props.data;
-	
-	if (letterData && letterData.state !== ('won' || 'lost')){
+
+	if (letterData && letterData.num_tries_left !== "-1" && letterData.state !== "won"){
+
 		return(
 			<div className="displayPhrase">
 			<p>Phrase: {letterData.phrase}</p>
 			<p>Guesses Left: {letterData.num_tries_left}</p>
+			<DisplayHangman data={letterData} />
 			</div>
 			);
 		}
-	else if (letterData && letterData.state === ('won' || 'lost')){
+	else if (letterData && letterData.num_tries_left === "-1"){
 		return(
 			<div className="displayPhrase">
-			<p>You {letterData.state}!</p>
-			<p>{letterData.phrase}</p>
+			You Lost!
+			</div>
+			);
+	}
+	else if (letterData && letterData.state === "won"){
+		return(
+			<div className="displayPhrase">
+			You won!
 			</div>
 			);
 	}
 	else {
 		return(
 			<div className="displayPhrase">
-
 			</div>
 			);
 		}
@@ -157,6 +160,111 @@ var DisplayPhrase = React.createClass({
 
 });
 
+var DisplayHangman = React.createClass({
+	render: function(){
+		var letterData = this.props.data;
+		var numTries = letterData.num_tries_left;
+		switch(numTries){
+			case "-1":
+				return(
+					<div>
+					<div className="gallowOverhead">
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					<div className="torso" />
+					<div className="leftArm" />
+					<div className="rightArm" />
+					<div className="leftLeg" />
+					<div className="rightLeg" /> 
+					</div>
+					
+					</div>
+					);
+				case "0":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					<div className="torso" />
+					<div className="leftArm" />
+					<div className="rightArm" />
+					<div className="leftLeg" />
+					</div>
+					);
+				case "1":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					<div className="torso" />
+					<div className="leftArm" />
+					<div className="rightArm" />
+					</div>
+					);
+				case "2":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					<div className="torso" />
+					<div className="leftArm" />
+					</div>
+					);
+
+				case "3":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					<div className="torso" />
+					</div>
+					);
+				case "4":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					<div className="head" />
+					</div>
+					);
+				case "5":
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowHang" />
+					<div className="gallowTorso" />
+					</div>
+					);
+				default:
+				return(
+					<div>
+					<div className="gallowOverhead" />
+					<div className="gallowTorso"> 
+					<div className="gallowHang" />
+
+					</div>
+					</div>
+			);
+
+
+
+	}
+
+}
+
+});
+
+//TODO: seperate phrase underscores
 //TODO: display hangman
 //TODO: show letters that have been guessed
 //TODO: put logic to make sure you cant guess the same letters over and over again
