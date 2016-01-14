@@ -1,3 +1,5 @@
+'use strict'
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../css/styles.css';
@@ -6,6 +8,11 @@ import TextField from 'material-ui/lib/text-field';
 
 
 var TitleBox = React.createClass({
+
+
+	//have a state in here, determines if start game was clicked, once its clicked it dissapears, will have to add the ability to start a game(b
+		//button) somewhere else
+	
 	handleEmailSubmit: function(comment) { //TODO come up with a better name than comment
 	    $.ajax({
 	      url: this.props.url,
@@ -13,7 +20,7 @@ var TitleBox = React.createClass({
 	      type: 'POST',
 	      data: JSON.stringify(comment),
 	      success: function(data) {
-	        this.setState({data: data});
+	        this.setState({data: data, showResults:false});
 	      }.bind(this),
 	      error: function(xhr, status, err) {
 	        console.error(this.props.url, status, err.toString());
@@ -35,15 +42,15 @@ var TitleBox = React.createClass({
 	    });
   	},
   	getInitialState: function() {
-    return {data: []};
+    return {data: [], showResults: true};
   },
 	render: function(){
 		return (
 			<div className="titleBox">
-				<h2>Hangman</h2>
-				<h3>Enter Your Email Below</h3>
-				<EmailForm onEmailSubmit={this.handleEmailSubmit} />
-				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} data={this.state.data} />
+			<h1>Welcome to Hangman</h1>
+			 { this.state.showResults ? <EmailForm onEmailSubmit={this.handleEmailSubmit}  /> : null }
+					
+				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} letterData={this.state.letterData} data={this.state.data} />
 				<DisplayPhrase data={this.state.letterData} />
 			</div>
 
@@ -54,10 +61,10 @@ var TitleBox = React.createClass({
 
 var EmailForm = React.createClass({
 	getInitialState: function() {
-    	return {email: ''};
+    	return {email: '', state: ''};
   		},
   	handleEmailChange: function(e) {
-    	this.setState({email: e.target.value});
+    	this.setState({email: e.target.value, state: "on"});
   		},
 	handleSubmit: function(e){
 		e.preventDefault();
@@ -66,17 +73,19 @@ var EmailForm = React.createClass({
 			return; //TODO :make something come up when no email
 		}
 		this.props.onEmailSubmit({email: email});
-		this.setState({email: ''});
+		this.setState({email: '', state: "on"});
 	},
 
 	render: function(){
 		return (
+			
 			<form className="emailForm" onSubmit={this.handleSubmit}>
-				<TextField  type="email" name="email" hintText="example@example.com" value={this.state.email} onChange={this.handleEmailChange} required/>
+				<TextField  type="email" name="email" hintText="Enter your email to start!" value={this.state.email} onChange={this.handleEmailChange} required/>
 				<RaisedButton type="submit" value="Post" label="Start Game" />
 			</form>
 			);
 	}
+	
 
 
 });
@@ -101,15 +110,24 @@ var NewGameDetails = React.createClass({
   		},
 	render: function(){
 		var gameData = this.props.data;
-		if (gameData.state === 'alive'){
+		var letterData = this.props.letterData;
+		if (letterData){
+			var curData = this.props.letterData;
+		}
+		else{
+			curData = this.props.data;
+		}
+		
+
+		if (curData.state === 'alive'){
 		return(
 			<div>
 		<div className="newGameDetails">
-		<h2>New Game Below</h2>
+		<h3>Enter a Letter</h3>
 		</div>
 		<form className="letterForm" onSubmit={this.handleSubmit}>
-				<input type="text" name="guess" placeholder="letter(a-z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
-				<input type="submit" value="Post" />
+				<TextField type="text" name="guess" placeholder="letter(a-z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
+				<RaisedButton type="submit" value="Post" label="Submit"/>
 			</form>
 		</div>
 
@@ -117,11 +135,8 @@ var NewGameDetails = React.createClass({
 	}
 	else{
 		return(
-			<div className="newGameDetails">
-		<h2> Game not started</h2>
-		</div>
-
-			)
+			<div />
+			);
 	}
 	}
 });
@@ -132,12 +147,12 @@ var DisplayPhrase = React.createClass({
 	render: function(){
 	var letterData = this.props.data;
 
+	
 	if (letterData && letterData.num_tries_left !== "-1" && letterData.state !== "won"){
 
 		return(
 			<div className="displayPhrase">
-			<p>Phrase: {letterData.phrase}</p>
-			<p>Guesses Left: {letterData.num_tries_left}</p>
+			<p>Phrase: {letterData.phrase} Guesses Left: {letterData.num_tries_left}</p>
 			<DisplayHangman data={letterData} />
 			</div>
 			);
