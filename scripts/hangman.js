@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../src/css/styles.css'
+import '../css/styles.css';
+import RaisedButton from 'material-ui/lib/raised-button';
+import TextField from 'material-ui/lib/text-field';
 
 
 var TitleBox = React.createClass({
@@ -70,8 +72,8 @@ var EmailForm = React.createClass({
 	render: function(){
 		return (
 			<form className="emailForm" onSubmit={this.handleSubmit}>
-				<input type="email" name="email" placeholder="example@example.com" value={this.state.email} onChange={this.handleEmailChange} required/>
-				<input type="submit" value="Post" />
+				<TextField  type="email" name="email" hintText="example@example.com" value={this.state.email} onChange={this.handleEmailChange} required/>
+				<RaisedButton type="submit" value="Post" label="Start Game" />
 			</form>
 			);
 	}
