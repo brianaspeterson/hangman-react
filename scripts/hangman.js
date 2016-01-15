@@ -6,7 +6,9 @@ import '../css/styles.css';
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 
-
+var iconStyles = {
+  marginRight: 24,
+};
 var TitleBox = React.createClass({
 
 
@@ -47,6 +49,7 @@ var TitleBox = React.createClass({
 	render: function(){
 		return (
 			<div className="titleBox">
+			 
 			<h1>Welcome to Hangman</h1>
 			 { this.state.showResults ? <EmailForm onEmailSubmit={this.handleEmailSubmit}  /> : null }
 					
@@ -80,7 +83,7 @@ var EmailForm = React.createClass({
 		return (
 			
 			<form className="emailForm" onSubmit={this.handleSubmit}>
-				<TextField  type="email" name="email" hintText="Enter your email to start!" value={this.state.email} onChange={this.handleEmailChange} required/>
+				<TextField type="email" name="email" hintText="Enter your email to start!" value={this.state.email} onChange={this.handleEmailChange} required/>
 				<RaisedButton type="submit" value="Post" label="Start Game" />
 			</form>
 			);
@@ -111,27 +114,27 @@ var NewGameDetails = React.createClass({
 	render: function(){
 		var gameData = this.props.data;
 		var letterData = this.props.letterData;
-		if (letterData){
-			var curData = this.props.letterData;
+		if(letterData){
+			var curData = letterData;
 		}
 		else{
-			curData = this.props.data;
+			curData = gameData;
 		}
-		
-
 		if (curData.state === 'alive'){
 		return(
 			<div>
-		<div className="newGameDetails">
-		<h3>Enter a Letter</h3>
-		</div>
-		<form className="letterForm" onSubmit={this.handleSubmit}>
-				<TextField type="text" name="guess" placeholder="letter(a-z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
-				<RaisedButton type="submit" value="Post" label="Submit"/>
-			</form>
-		</div>
+				<div className="newGameDetails">
+				</div>
 
-		);
+				<RaisedButton linkButton={true} href="." label="Start Over" />
+				<br />
+				<br />
+				<form className="letterForm" onSubmit={this.handleSubmit}>
+						<TextField type="text" name="guess" hintText="Enter a letter(A-Z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
+						<RaisedButton type="submit" value="Post" label="Submit"/>
+					</form>
+			</div>
+			);
 	}
 	else{
 		return(
@@ -141,7 +144,6 @@ var NewGameDetails = React.createClass({
 	}
 });
 
-//Display phrase
 var DisplayPhrase = React.createClass({
 	
 	render: function(){
@@ -149,10 +151,10 @@ var DisplayPhrase = React.createClass({
 
 	
 	if (letterData && letterData.num_tries_left !== "-1" && letterData.state !== "won"){
-
+		var numTries = parseInt(letterData.num_tries_left,10) +1;
 		return(
 			<div className="displayPhrase">
-			<p>Phrase: {letterData.phrase} Guesses Left: {letterData.num_tries_left}</p>
+			<p>Phrase: {letterData.phrase} Guesses Left: {numTries}</p>
 			<DisplayHangman data={letterData} />
 			</div>
 			);
@@ -167,7 +169,8 @@ var DisplayPhrase = React.createClass({
 	else if (letterData && letterData.state === "won"){
 		return(
 			<div className="displayPhrase">
-			You won!
+			<p>Phrase: {letterData.phrase} Guesses Left: {numTries}</p>
+			<p>You won!</p>
 			</div>
 			);
 	}
@@ -213,6 +216,8 @@ var DisplayHangman = React.createClass({
 					<div className="leftArm" />
 					<div className="rightArm" />
 					<div className="leftLeg" />
+					<div className="rightLeg" /> 
+
 					</div>
 					);
 				case "1":
@@ -285,16 +290,11 @@ var DisplayHangman = React.createClass({
 
 });
 
-//TODO: seperate phrase underscores
-//TODO: display hangman
+//TODO: hamburger menu with start over
 //TODO: show letters that have been guessed
-//TODO: put logic to make sure you cant guess the same letters over and over again
 //TODO: css!!!!
 
 
-
-
-//Display hangman drawing
 
 ReactDOM.render(
   <TitleBox url="http://hangman.coursera.org/hangman/game" />,
