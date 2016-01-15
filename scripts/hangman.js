@@ -164,16 +164,22 @@ var DisplayPhrase = React.createClass({
 		}
 	else if (letterData && letterData.num_tries_left === "-1"){
 		return(
-			<div className="displayPhrase">
-			You Lost!
+			<div>
+				<div className="displayPhrase">
+					<p>You Lost!</p>
+				</div>
+				<RaisedButton linkButton={true} href="." label="Start Over" />
 			</div>
 			);
 	}
 	else if (letterData && letterData.state === "won"){
 		return(
-			<div className="displayPhrase">
-			<p>Phrase: {letterData.phrase} Guesses Left: {numTries}</p>
-			<p>You won!</p>
+			<div>
+				<div className="displayPhrase">
+					<p>Phrase: {letterData.phrase}</p>
+					<p>You won!!!!</p>
+				</div>
+		   	 	<RaisedButton linkButton={true} href="." label="Start Over" />
 			</div>
 			);
 	}
@@ -270,7 +276,6 @@ var DisplayHangman = React.createClass({
 				case "5":
 				return(
 					<div>
-					<br />
 					<div className="gallowOverhead" />
 					<div className="gallowHang" />
 					<div className="gallowTorso" />
@@ -279,7 +284,6 @@ var DisplayHangman = React.createClass({
 				default:
 				return(
 					<div>
-					<br />
 					<div className="gallowOverhead" />
 					<div className="gallowTorso"> 
 					<div className="gallowHang" />
