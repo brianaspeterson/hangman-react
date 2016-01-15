@@ -7509,13 +7509,13 @@
 	var TitleBox = _react2.default.createClass({
 		displayName: 'TitleBox',
 	
-		handleEmailSubmit: function handleEmailSubmit(comment) {
+		handleEmailSubmit: function handleEmailSubmit(email) {
 			//TODO come up with a better name than comment
 			$.ajax({
 				url: this.props.url,
 				dataType: 'json',
 				type: 'POST',
-				data: JSON.stringify(comment),
+				data: JSON.stringify(email),
 				success: function (data) {
 					this.setState({ data: data, showResults: false });
 				}.bind(this),
@@ -7524,15 +7524,15 @@
 				}.bind(this)
 			});
 		},
-		handleLetterSubmit: function handleLetterSubmit(comment, data) {
+		handleLetterSubmit: function handleLetterSubmit(letter, game_key) {
 			//TODO come up with a better name than comment
 			$.ajax({
-				url: this.props.url + '/' + data.game_key,
+				url: this.props.url + '/' + game_key.game_key,
 				dataType: 'json',
 				type: 'POST',
-				data: JSON.stringify(comment),
+				data: JSON.stringify(letter),
 				success: function (data) {
-					this.setState({ letterData: data });
+					this.setState({ letterData: data, letter: lettter });
 				}.bind(this),
 				error: function (xhr, status, err) {
 					console.error(this.props.url, status, err.toString());
@@ -7552,7 +7552,7 @@
 					'Welcome to Hangman'
 				),
 				this.state.showResults ? _react2.default.createElement(EmailForm, { onEmailSubmit: this.handleEmailSubmit }) : null,
-				_react2.default.createElement(NewGameDetails, { onLetterSubmit: this.handleLetterSubmit, letterData: this.state.letterData, data: this.state.data }),
+				_react2.default.createElement(NewGameDetails, { onLetterSubmit: this.handleLetterSubmit, letter: this.state.letter, letterData: this.state.letterData, data: this.state.data }),
 				_react2.default.createElement(DisplayPhrase, { data: this.state.letterData })
 			);
 		}
@@ -7591,7 +7591,7 @@
 		displayName: 'NewGameDetails',
 	
 		getInitialState: function getInitialState() {
-			return { guess: '' };
+			return { guess: '', letter: '' };
 		},
 		handleSubmit: function handleSubmit(e) {
 			var gameData = this.props.data;
@@ -7641,7 +7641,7 @@
 	
 		render: function render() {
 			var letter = this.props.letter;
-			letterArray.push(letter);
+			letterArray.push(" " + letter + " ");
 			return _react2.default.createElement(
 				'div',
 				{ className: 'lettersDisplay' },
@@ -27348,7 +27348,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n    height: 100%;\n    padding: 30px;\n    background-image: url(" + __webpack_require__(236) + ");\n    font-color: #ffffff;\n}\n\nTextField{\ncolor: #ffffff;\n\n}\n#content {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.titleBox {\n\tcolor: #ffffff;\n\ttext-align: center;\n}\n\nh2 {\n\tfont-family: 'Open Sans', sans-serif;\n}\nh3 {\n\tfont-family: 'Open Sans', sans-serif;\n}\n\n.displayPhrase {\n\tfont-family: 'Open Sans', sans-serif;\n\tfont-size: 40px;\n}\n\n.muidocs-icon-action-home{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 50%;\n\theight:50%;\n\tbackground-color: #ffffff;\n}\n\n\n\n.gallowTorso{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: .4%;\n\theight:50%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowHang{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 65%;\n\twidth: .4%;\n\theight:5%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowOverhead{\n\tposition: absolute;\n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 15%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\n}\n\n\n.head{\n\tposition: absolute; \n  \ttop: 55%;\n  \tleft: 62%;\n\twidth: 6%;\n\theight: 10%;\n\tborder-radius: 100%;\n\tborder: 5px solid #ffffff;\n\n}\n\n.torso{\n\tposition: absolute; \n  \ttop: 66%;\n  \tleft: 65%;\n\theight: 14%;\n\twidth: 1px;\n\tborder: 5px solid #ffffff;\n\tbackground-color: #ffffff;\n\n}\n\n.leftArm{\n\tposition: absolute; \n  \ttop: 69%;\n  \tleft: 60%;\n\twidth: 6%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n\n}\n\n\n.rightArm{\n\tposition: absolute; \n  \ttop: 70%;\n  \tleft: 65%;\n\twidth: 5%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(138deg);\n\n\n}\n\n.leftLeg{\n\tposition: absolute;\n  \ttop: 85%;\n  \tleft: 59%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(-225deg);\n\n}\n\n.rightLeg{\n\tposition: absolute; \n  \ttop: 85%;\n  \tleft: 64%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n}\n\n", ""]);
+	exports.push([module.id, "body {\n    height: 100%;\n    padding: 30px;\n    background-image: url(" + __webpack_require__(236) + ");\n    font-color: #ffffff;\n}\n\nTextField{\ncolor: #ffffff;\n\n}\n#content {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.titleBox {\n\tcolor: #ffffff;\n\ttext-align: center;\n}\n\nh2 {\n\tfont-family: 'Open Sans', sans-serif;\n}\nh3 {\n\tfont-family: 'Open Sans', sans-serif;\n}\n\n.displayPhrase {\n\tfont-family: 'Open Sans', sans-serif;\n\tfont-size: 40px;\n}\n\n.lettersDisplay {\n\tfont-family: 'Open Sans', sans-serif;\n\tfont-size: 14px;\n}\n\n\n.gallowTorso{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: .4%;\n\theight:50%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowHang{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 65%;\n\twidth: .4%;\n\theight:5%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowOverhead{\n\tposition: absolute;\n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 15%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\n}\n\n\n.head{\n\tposition: absolute; \n  \ttop: 55%;\n  \tleft: 62%;\n\twidth: 6%;\n\theight: 10%;\n\tborder-radius: 100%;\n\tborder: 5px solid #ffffff;\n\n}\n\n.torso{\n\tposition: absolute; \n  \ttop: 66%;\n  \tleft: 65%;\n\theight: 14%;\n\twidth: 1px;\n\tborder: 5px solid #ffffff;\n\tbackground-color: #ffffff;\n\n}\n\n.leftArm{\n\tposition: absolute; \n  \ttop: 69%;\n  \tleft: 60%;\n\twidth: 6%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n\n}\n\n\n.rightArm{\n\tposition: absolute; \n  \ttop: 70%;\n  \tleft: 65%;\n\twidth: 5%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(138deg);\n\n\n}\n\n.leftLeg{\n\tposition: absolute;\n  \ttop: 85%;\n  \tleft: 59%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(-225deg);\n\n}\n\n.rightLeg{\n\tposition: absolute; \n  \ttop: 85%;\n  \tleft: 64%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n}\n\n", ""]);
 	
 	// exports
 

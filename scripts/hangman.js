@@ -23,14 +23,14 @@ var TitleBox = React.createClass({
 	      }.bind(this)
 	    });
   	},
-  	handleLetterSubmit: function(letter, game_key) { //TODO come up with a better name than comment
+  	handleLetterSubmit: function(comment, data) { //TODO come up with a better name than comment
 	    $.ajax({
-	      url: this.props.url + '/' + game_key.game_key,
+	      url: this.props.url + '/' + data.game_key,
 	      dataType: 'json',
 	      type: 'POST',
-	      data: JSON.stringify(letter),
+	      data: JSON.stringify(comment),
 	      success: function(data) {
-	        this.setState({letterData: data, letter: lettter});
+	        this.setState({letterData: data});
 	      }.bind(this),
 	      error: function(xhr, status, err) {
 	        console.error(this.props.url, status, err.toString());
@@ -45,7 +45,7 @@ var TitleBox = React.createClass({
 			<div className="titleBox">
 				<h1>Welcome to Hangman</h1>
 			    { this.state.showResults ? <EmailForm onEmailSubmit={this.handleEmailSubmit}  /> : null }
-				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} letter={this.state.letter} letterData={this.state.letterData} data={this.state.data} />
+				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} letterData={this.state.letterData} data={this.state.data} />
 				<DisplayPhrase data={this.state.letterData} />
 			</div>
 		);
@@ -82,7 +82,7 @@ var EmailForm = React.createClass({
 
 var NewGameDetails = React.createClass({
 	getInitialState: function() {
-    	return {guess: '', letter: ''};
+    	return {guess: '', realLetter: ''};
   		},
   	handleSubmit: function(e){
   		var gameData = this.props.data;
@@ -93,10 +93,11 @@ var NewGameDetails = React.createClass({
 			return; 
 		}
 		this.props.onLetterSubmit({guess: guess}, gameData);
-		this.setState({guess:  ''});
+		this.setState({guess: '', realLetter: guess});
+
 	},	
   	handleLetterChange: function(e) {
-    	this.setState({guess: e.target.value});
+    	this.setState({guess: e.target.value, realLetter: ''});
   		},
 	render: function(){
 		var gameData = this.props.data;
@@ -110,10 +111,11 @@ var NewGameDetails = React.createClass({
 		if (curData.state === 'alive'){
 			return(
 				<div className="newGameDetails" >
-					<AlreadyUsed  letter={this.props.letter}/>
+					<AlreadyUsed  letter={this.state.realLetter} />
+					<br />
 					<RaisedButton linkButton={true} href="." label="Start Over" /><br /><br />
 					<form className="letterForm" onSubmit={this.handleSubmit}>
-							<TextField type="text" name="guess" hintText="Enter a letter(A-Z)" value={this.state.guess} onChange={this.handleLetterChange}  required pattern="[A-Za-z]" />
+							<TextField type="text" name="guess" hintText="Enter a letter(A-Z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
 							<RaisedButton type="submit" value="Post" label="Submit"/>
 						</form>
 				</div>
@@ -130,11 +132,15 @@ var NewGameDetails = React.createClass({
 var AlreadyUsed = React.createClass({
 	render: function(){
 		var letter = this.props.letter;
-		letterArray.push("" + letter + "");
+		if(letterArray.indexOf(letter) === -1){
+			letterArray.push(letter);
+			letterArray.push('   ');
+		}
 		return(
 			<div className="lettersDisplay">
-				Letters: {letterArray}
+				Letters Already Guessed: {letterArray}
 				</div>
+
 			);
 	}
 
@@ -151,7 +157,7 @@ var DisplayPhrase = React.createClass({
 		var numTries = parseInt(letterData.num_tries_left,10) +1;
 		return(
 			<div className="displayPhrase">
-			<p>Phrase: {letterData.phrase} Guesses Left: {numTries}</p>
+			Phrase: {letterData.phrase} Guesses Left: {numTries}
 			<DisplayHangman data={letterData} />
 			</div>
 			);
@@ -189,6 +195,7 @@ var DisplayHangman = React.createClass({
 			case "-1":
 				return(
 					<div>
+					<br />
 					<div className="gallowOverhead">
 					<div className="gallowHang" />
 					<div className="gallowTorso" />
@@ -263,6 +270,7 @@ var DisplayHangman = React.createClass({
 				case "5":
 				return(
 					<div>
+					<br />
 					<div className="gallowOverhead" />
 					<div className="gallowHang" />
 					<div className="gallowTorso" />
@@ -271,6 +279,7 @@ var DisplayHangman = React.createClass({
 				default:
 				return(
 					<div>
+					<br />
 					<div className="gallowOverhead" />
 					<div className="gallowTorso"> 
 					<div className="gallowHang" />
