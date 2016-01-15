@@ -7503,6 +7503,10 @@
 	
 	var _textField2 = _interopRequireDefault(_textField);
 	
+	var _login = __webpack_require__(316);
+	
+	var _login2 = _interopRequireDefault(_login);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var letterArray = [];
@@ -7551,38 +7555,9 @@
 					null,
 					'Welcome to Hangman'
 				),
-				this.state.showResults ? _react2.default.createElement(EmailForm, { onEmailSubmit: this.handleEmailSubmit }) : null,
+				this.state.showResults ? _react2.default.createElement(_login2.default, { onEmailSubmit: this.handleEmailSubmit }) : null,
 				_react2.default.createElement(NewGameDetails, { onLetterSubmit: this.handleLetterSubmit, letterData: this.state.letterData, data: this.state.data }),
 				_react2.default.createElement(DisplayPhrase, { data: this.state.letterData })
-			);
-		}
-	});
-	
-	var EmailForm = _react2.default.createClass({
-		displayName: 'EmailForm',
-	
-		getInitialState: function getInitialState() {
-			return { email: '', state: '' };
-		},
-		handleEmailChange: function handleEmailChange(e) {
-			this.setState({ email: e.target.value, state: "on" });
-		},
-		handleSubmit: function handleSubmit(e) {
-			e.preventDefault();
-			var email = this.state.email;
-			if (!email) {
-				return;
-			}
-			this.props.onEmailSubmit({ email: email });
-			this.setState({ email: '', state: "on" });
-		},
-	
-		render: function render() {
-			return _react2.default.createElement(
-				'form',
-				{ className: 'emailForm', onSubmit: this.handleSubmit },
-				_react2.default.createElement(_textField2.default, { type: 'email', name: 'email', hintText: 'Enter your email to start!', value: this.state.email, onChange: this.handleEmailChange, required: true }),
-				_react2.default.createElement(_raisedButton2.default, { type: 'submit', value: 'Post', label: 'Start Game' })
 			);
 		}
 	});
@@ -7676,26 +7651,38 @@
 			} else if (letterData && letterData.num_tries_left === "-1") {
 				return _react2.default.createElement(
 					'div',
-					{ className: 'displayPhrase' },
-					'You Lost!'
+					null,
+					_react2.default.createElement(
+						'div',
+						{ className: 'displayPhrase' },
+						_react2.default.createElement(
+							'p',
+							null,
+							'You Lost!'
+						)
+					),
+					_react2.default.createElement(_raisedButton2.default, { linkButton: true, href: '.', label: 'Start Over' })
 				);
 			} else if (letterData && letterData.state === "won") {
 				return _react2.default.createElement(
 					'div',
-					{ className: 'displayPhrase' },
+					null,
 					_react2.default.createElement(
-						'p',
-						null,
-						'Phrase: ',
-						letterData.phrase,
-						' Guesses Left: ',
-						numTries
+						'div',
+						{ className: 'displayPhrase' },
+						_react2.default.createElement(
+							'p',
+							null,
+							'Phrase: ',
+							letterData.phrase
+						),
+						_react2.default.createElement(
+							'p',
+							null,
+							'You won!!!!'
+						)
 					),
-					_react2.default.createElement(
-						'p',
-						null,
-						'You won!'
-					)
+					_react2.default.createElement(_raisedButton2.default, { linkButton: true, href: '.', label: 'Start Over' })
 				);
 			} else {
 				return _react2.default.createElement('div', { className: 'displayPhrase' });
@@ -7790,7 +7777,6 @@
 					return _react2.default.createElement(
 						'div',
 						null,
-						_react2.default.createElement('br', null),
 						_react2.default.createElement('div', { className: 'gallowOverhead' }),
 						_react2.default.createElement('div', { className: 'gallowHang' }),
 						_react2.default.createElement('div', { className: 'gallowTorso' })
@@ -7799,7 +7785,6 @@
 					return _react2.default.createElement(
 						'div',
 						null,
-						_react2.default.createElement('br', null),
 						_react2.default.createElement('div', { className: 'gallowOverhead' }),
 						_react2.default.createElement(
 							'div',
@@ -35730,6 +35715,66 @@
 	module.exports = warning;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(76);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(232);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	__webpack_require__(75);
+	
+	__webpack_require__(233);
+	
+	var _raisedButton = __webpack_require__(238);
+	
+	var _raisedButton2 = _interopRequireDefault(_raisedButton);
+	
+	var _textField = __webpack_require__(305);
+	
+	var _textField2 = _interopRequireDefault(_textField);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import './handleHangmanDisplay';
+	// import './lettersUsed';
+	
+	var EmailForm = _react2.default.createClass({
+		displayName: 'EmailForm',
+	
+		getInitialState: function getInitialState() {
+			return { email: '', state: '' };
+		},
+		handleEmailChange: function handleEmailChange(e) {
+			this.setState({ email: e.target.value, state: 'on' });
+		},
+		handleSubmit: function handleSubmit(e) {
+			e.preventDefault();
+			var email = this.state.email;
+			if (!email) {
+				return;
+			}
+			this.props.onEmailSubmit({ email: email });
+			this.setState({ email: '', state: 'on' });
+		},
+	
+		render: function render() {
+			return _react2.default.createElement(
+				'form',
+				{ className: 'emailForm', onSubmit: this.handleSubmit },
+				_react2.default.createElement(_textField2.default, { type: 'email', name: 'email', hintText: 'Enter your email to start!', value: this.state.email, onChange: this.handleEmailChange, required: true }),
+				_react2.default.createElement(_raisedButton2.default, { type: 'submit', value: 'Post', label: 'Start Game' })
+			);
+		}
+	});
 
 /***/ }
 /******/ ]);
