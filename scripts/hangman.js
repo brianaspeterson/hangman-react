@@ -6,21 +6,15 @@ import '../css/styles.css';
 import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field';
 
-var iconStyles = {
-  marginRight: 24,
-};
+var letterArray = [];
 var TitleBox = React.createClass({
-
-
-	//have a state in here, determines if start game was clicked, once its clicked it dissapears, will have to add the ability to start a game(b
-		//button) somewhere else
 	
-	handleEmailSubmit: function(comment) { //TODO come up with a better name than comment
+	handleEmailSubmit: function(email) { //TODO come up with a better name than comment
 	    $.ajax({
 	      url: this.props.url,
 	      dataType: 'json',
 	      type: 'POST',
-	      data: JSON.stringify(comment),
+	      data: JSON.stringify(email),
 	      success: function(data) {
 	        this.setState({data: data, showResults:false});
 	      }.bind(this),
@@ -29,14 +23,14 @@ var TitleBox = React.createClass({
 	      }.bind(this)
 	    });
   	},
-  	handleLetterSubmit: function(comment, data) { //TODO come up with a better name than comment
+  	handleLetterSubmit: function(letter, game_key) { //TODO come up with a better name than comment
 	    $.ajax({
-	      url: this.props.url + '/' + data.game_key,
+	      url: this.props.url + '/' + game_key.game_key,
 	      dataType: 'json',
 	      type: 'POST',
-	      data: JSON.stringify(comment),
+	      data: JSON.stringify(letter),
 	      success: function(data) {
-	        this.setState({letterData: data});
+	        this.setState({letterData: data, letter: lettter});
 	      }.bind(this),
 	      error: function(xhr, status, err) {
 	        console.error(this.props.url, status, err.toString());
@@ -49,16 +43,12 @@ var TitleBox = React.createClass({
 	render: function(){
 		return (
 			<div className="titleBox">
-			 
-			<h1>Welcome to Hangman</h1>
-			 { this.state.showResults ? <EmailForm onEmailSubmit={this.handleEmailSubmit}  /> : null }
-					
-				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} letterData={this.state.letterData} data={this.state.data} />
+				<h1>Welcome to Hangman</h1>
+			    { this.state.showResults ? <EmailForm onEmailSubmit={this.handleEmailSubmit}  /> : null }
+				<NewGameDetails onLetterSubmit={this.handleLetterSubmit} letter={this.state.letter} letterData={this.state.letterData} data={this.state.data} />
 				<DisplayPhrase data={this.state.letterData} />
 			</div>
-
-
-			);
+		);
 	}
 });
 
@@ -71,9 +61,9 @@ var EmailForm = React.createClass({
   		},
 	handleSubmit: function(e){
 		e.preventDefault();
-		var email = this.state.email; //TODO: sanitize email to make sure its valid format
+		var email = this.state.email; 
 		if(!email){
-			return; //TODO :make something come up when no email
+			return; 
 		}
 		this.props.onEmailSubmit({email: email});
 		this.setState({email: '', state: "on"});
@@ -86,16 +76,13 @@ var EmailForm = React.createClass({
 				<TextField type="email" name="email" hintText="Enter your email to start!" value={this.state.email} onChange={this.handleEmailChange} required/>
 				<RaisedButton type="submit" value="Post" label="Start Game" />
 			</form>
-			);
+		);
 	}
-	
-
-
 });
 
 var NewGameDetails = React.createClass({
 	getInitialState: function() {
-    	return {guess: ''};
+    	return {guess: '', letter: ''};
   		},
   	handleSubmit: function(e){
   		var gameData = this.props.data;
@@ -106,7 +93,7 @@ var NewGameDetails = React.createClass({
 			return; 
 		}
 		this.props.onLetterSubmit({guess: guess}, gameData);
-		this.setState({guess: ''});
+		this.setState({guess:  ''});
 	},	
   	handleLetterChange: function(e) {
     	this.setState({guess: e.target.value});
@@ -116,32 +103,42 @@ var NewGameDetails = React.createClass({
 		var letterData = this.props.letterData;
 		if(letterData){
 			var curData = letterData;
+			}
+		else{
+				curData = gameData;
+			}
+		if (curData.state === 'alive'){
+			return(
+				<div className="newGameDetails" >
+					<AlreadyUsed  letter={this.props.letter}/>
+					<RaisedButton linkButton={true} href="." label="Start Over" /><br /><br />
+					<form className="letterForm" onSubmit={this.handleSubmit}>
+							<TextField type="text" name="guess" hintText="Enter a letter(A-Z)" value={this.state.guess} onChange={this.handleLetterChange}  required pattern="[A-Za-z]" />
+							<RaisedButton type="submit" value="Post" label="Submit"/>
+						</form>
+				</div>
+				);
 		}
 		else{
-			curData = gameData;
-		}
-		if (curData.state === 'alive'){
-		return(
-			<div>
-				<div className="newGameDetails">
-				</div>
-
-				<RaisedButton linkButton={true} href="." label="Start Over" />
-				<br />
-				<br />
-				<form className="letterForm" onSubmit={this.handleSubmit}>
-						<TextField type="text" name="guess" hintText="Enter a letter(A-Z)" value={this.state.guess} onChange={this.handleLetterChange} required pattern="[A-Za-z]" />
-						<RaisedButton type="submit" value="Post" label="Submit"/>
-					</form>
-			</div>
-			);
-	}
-	else{
 		return(
 			<div />
 			);
+		}
 	}
+});
+
+var AlreadyUsed = React.createClass({
+	render: function(){
+		var letter = this.props.letter;
+		letterArray.push("" + letter + "");
+		return(
+			<div className="lettersDisplay">
+				Letters: {letterArray}
+				</div>
+			);
 	}
+
+
 });
 
 var DisplayPhrase = React.createClass({
@@ -290,7 +287,6 @@ var DisplayHangman = React.createClass({
 
 });
 
-//TODO: hamburger menu with start over
 //TODO: show letters that have been guessed
 //TODO: css!!!!
 

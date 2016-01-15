@@ -7503,24 +7503,11 @@
 	
 	var _textField2 = _interopRequireDefault(_textField);
 	
-	var _fontIcon = __webpack_require__(316);
-	
-	var _fontIcon2 = _interopRequireDefault(_fontIcon);
-	
-	var _colors = __webpack_require__(263);
-	
-	var _colors2 = _interopRequireDefault(_colors);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var iconStyles = {
-		marginRight: 24
-	};
+	var letterArray = [];
 	var TitleBox = _react2.default.createClass({
 		displayName: 'TitleBox',
-	
-		//have a state in here, determines if start game was clicked, once its clicked it dissapears, will have to add the ability to start a game(b
-		//button) somewhere else
 	
 		handleEmailSubmit: function handleEmailSubmit(comment) {
 			//TODO come up with a better name than comment
@@ -7559,10 +7546,6 @@
 			return _react2.default.createElement(
 				'div',
 				{ className: 'titleBox' },
-				_react2.default.createElement(_fontIcon2.default, {
-					className: 'muidocs-icon-action-home',
-					style: iconStyles,
-					color: _colors2.default.blue500 }),
 				_react2.default.createElement(
 					'h1',
 					null,
@@ -7586,9 +7569,9 @@
 		},
 		handleSubmit: function handleSubmit(e) {
 			e.preventDefault();
-			var email = this.state.email; //TODO: sanitize email to make sure its valid format
+			var email = this.state.email;
 			if (!email) {
-				return; //TODO :make something come up when no email
+				return;
 			}
 			this.props.onEmailSubmit({ email: email });
 			this.setState({ email: '', state: "on" });
@@ -7602,7 +7585,6 @@
 				_react2.default.createElement(_raisedButton2.default, { type: 'submit', value: 'Post', label: 'Start Game' })
 			);
 		}
-	
 	});
 	
 	var NewGameDetails = _react2.default.createClass({
@@ -7629,16 +7611,18 @@
 			var gameData = this.props.data;
 			var letterData = this.props.letterData;
 			if (letterData) {
-				var curData = this.props.letterData;
+				var curData = letterData;
 			} else {
-				curData = this.props.data;
+				curData = gameData;
 			}
-	
 			if (curData.state === 'alive') {
 				return _react2.default.createElement(
 					'div',
-					null,
-					_react2.default.createElement('div', { className: 'newGameDetails' }),
+					{ className: 'newGameDetails' },
+					_react2.default.createElement(AlreadyUsed, { letter: this.state.guess }),
+					_react2.default.createElement(_raisedButton2.default, { linkButton: true, href: '.', label: 'Start Over' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement('br', null),
 					_react2.default.createElement(
 						'form',
 						{ className: 'letterForm', onSubmit: this.handleSubmit },
@@ -7650,6 +7634,22 @@
 				return _react2.default.createElement('div', null);
 			}
 		}
+	});
+	
+	var AlreadyUsed = _react2.default.createClass({
+		displayName: 'AlreadyUsed',
+	
+		render: function render() {
+			var letter = this.props.letter;
+			letterArray.push(letter);
+			return _react2.default.createElement(
+				'div',
+				{ className: 'lettersDisplay' },
+				'Letters: ',
+				letterArray
+			);
+		}
+	
 	});
 	
 	var DisplayPhrase = _react2.default.createClass({
@@ -7810,7 +7810,6 @@
 	
 	});
 	
-	//TODO: hamburger menu with start over
 	//TODO: show letters that have been guessed
 	//TODO: css!!!!
 	
@@ -27349,7 +27348,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n    height: 100%;\n    padding: 30px;\n    background-image: url(" + __webpack_require__(236) + ");\n    font-color: #ffffff;\n}\n\nTextField{\ncolor: #ffffff;\n\n}\n#content {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.titleBox {\n\tcolor: #ffffff;\n\ttext-align: center;\n}\n\nh2 {\n\tfont-family: 'Open Sans', sans-serif;\n}\nh3 {\n\tfont-family: 'Open Sans', sans-serif;\n}\n\n.displayPhrase {\n\tfont-family: 'Open Sans', sans-serif;\n\tfont-size: 40px;\n}\n\n\n\n\n\n.gallowTorso{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: .4%;\n\theight:50%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowHang{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 65%;\n\twidth: .4%;\n\theight:5%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowOverhead{\n\tposition: absolute;\n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 15%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\n}\n\n\n.head{\n\tposition: absolute; \n  \ttop: 55%;\n  \tleft: 62%;\n\twidth: 6%;\n\theight: 10%;\n\tborder-radius: 100%;\n\tborder: 5px solid #ffffff;\n\n}\n\n.torso{\n\tposition: absolute; \n  \ttop: 66%;\n  \tleft: 65%;\n\theight: 14%;\n\twidth: 1px;\n\tborder: 5px solid #ffffff;\n\tbackground-color: #ffffff;\n\n}\n\n.leftArm{\n\tposition: absolute; \n  \ttop: 69%;\n  \tleft: 60%;\n\twidth: 6%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n\n}\n\n\n.rightArm{\n\tposition: absolute; \n  \ttop: 70%;\n  \tleft: 65%;\n\twidth: 5%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(138deg);\n\n\n}\n\n.leftLeg{\n\tposition: absolute;\n  \ttop: 85%;\n  \tleft: 59%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(-225deg);\n\n}\n\n.rightLeg{\n\tposition: absolute; \n  \ttop: 85%;\n  \tleft: 64%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n}\n\n", ""]);
+	exports.push([module.id, "body {\n    height: 100%;\n    padding: 30px;\n    background-image: url(" + __webpack_require__(236) + ");\n    font-color: #ffffff;\n}\n\nTextField{\ncolor: #ffffff;\n\n}\n#content {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.titleBox {\n\tcolor: #ffffff;\n\ttext-align: center;\n}\n\nh2 {\n\tfont-family: 'Open Sans', sans-serif;\n}\nh3 {\n\tfont-family: 'Open Sans', sans-serif;\n}\n\n.displayPhrase {\n\tfont-family: 'Open Sans', sans-serif;\n\tfont-size: 40px;\n}\n\n.muidocs-icon-action-home{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 50%;\n\theight:50%;\n\tbackground-color: #ffffff;\n}\n\n\n\n.gallowTorso{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: .4%;\n\theight:50%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowHang{\n\tposition: absolute; \n  \ttop: 50%;\n  \tleft: 65%;\n\twidth: .4%;\n\theight:5%;\n\tbackground-color: #ffffff;\n\n}\n\n.gallowOverhead{\n\tposition: absolute;\n  \ttop: 50%;\n  \tleft: 50%;\n\twidth: 15%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\n}\n\n\n.head{\n\tposition: absolute; \n  \ttop: 55%;\n  \tleft: 62%;\n\twidth: 6%;\n\theight: 10%;\n\tborder-radius: 100%;\n\tborder: 5px solid #ffffff;\n\n}\n\n.torso{\n\tposition: absolute; \n  \ttop: 66%;\n  \tleft: 65%;\n\theight: 14%;\n\twidth: 1px;\n\tborder: 5px solid #ffffff;\n\tbackground-color: #ffffff;\n\n}\n\n.leftArm{\n\tposition: absolute; \n  \ttop: 69%;\n  \tleft: 60%;\n\twidth: 6%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n\n}\n\n\n.rightArm{\n\tposition: absolute; \n  \ttop: 70%;\n  \tleft: 65%;\n\twidth: 5%;\n\theight: .8%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(138deg);\n\n\n}\n\n.leftLeg{\n\tposition: absolute;\n  \ttop: 85%;\n  \tleft: 59%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(-225deg);\n\n}\n\n.rightLeg{\n\tposition: absolute; \n  \ttop: 85%;\n  \tleft: 64%;\n\twidth: 7.5%;\n\theight: .7%;\n\tbackground-color: #ffffff;\n\ttransform: rotate(45deg);\n\n}\n\n", ""]);
 	
 	// exports
 
@@ -35728,156 +35727,6 @@
 	module.exports = warning;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(76);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _stylePropable = __webpack_require__(239);
-	
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-	
-	var _transitions = __webpack_require__(257);
-	
-	var _transitions2 = _interopRequireDefault(_transitions);
-	
-	var _lightRawTheme = __webpack_require__(276);
-	
-	var _lightRawTheme2 = _interopRequireDefault(_lightRawTheme);
-	
-	var _themeManager = __webpack_require__(279);
-	
-	var _themeManager2 = _interopRequireDefault(_themeManager);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
-	var FontIcon = _react2.default.createClass({
-	  displayName: 'FontIcon',
-	
-	  propTypes: {
-	    /**
-	     * This is the font color of the font icon. If not specified,
-	     * this component will default to muiTheme.palette.textColor.
-	     */
-	    color: _react2.default.PropTypes.string,
-	
-	    /**
-	     * This is the icon color when the mouse hovers over the icon.
-	     */
-	    hoverColor: _react2.default.PropTypes.string,
-	
-	    /**
-	     * Function called when mouse enters this element.
-	     */
-	    onMouseEnter: _react2.default.PropTypes.func,
-	
-	    /**
-	     * Function called when mouse leaves this element.
-	     */
-	    onMouseLeave: _react2.default.PropTypes.func,
-	
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-	
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-	
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-	
-	  mixins: [_stylePropable2.default],
-	
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      onMouseEnter: function onMouseEnter() {},
-	      onMouseLeave: function onMouseLeave() {}
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      hovered: false,
-	      muiTheme: this.context.muiTheme ? this.context.muiTheme : _themeManager2.default.getMuiTheme(_lightRawTheme2.default)
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-	
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  _handleMouseLeave: function _handleMouseLeave(e) {
-	    // hover is needed only when a hoverColor is defined
-	    if (this.props.hoverColor !== undefined) this.setState({ hovered: false });
-	    if (this.props.onMouseLeave) {
-	      this.props.onMouseLeave(e);
-	    }
-	  },
-	  _handleMouseEnter: function _handleMouseEnter(e) {
-	    // hover is needed only when a hoverColor is defined
-	    if (this.props.hoverColor !== undefined) this.setState({ hovered: true });
-	    if (this.props.onMouseEnter) {
-	      this.props.onMouseEnter(e);
-	    }
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var color = _props.color;
-	    var hoverColor = _props.hoverColor;
-	    var onMouseLeave = _props.onMouseLeave;
-	    var onMouseEnter = _props.onMouseEnter;
-	    var style = _props.style;
-	
-	    var other = _objectWithoutProperties(_props, ['color', 'hoverColor', 'onMouseLeave', 'onMouseEnter', 'style']);
-	
-	    var spacing = this.state.muiTheme.rawTheme.spacing;
-	    var offColor = color ? color : style && style.color ? style.color : this.state.muiTheme.rawTheme.palette.textColor;
-	    var onColor = hoverColor ? hoverColor : offColor;
-	
-	    var mergedStyles = this.prepareStyles({
-	      position: 'relative',
-	      fontSize: spacing.iconSize,
-	      display: 'inline-block',
-	      userSelect: 'none',
-	      transition: _transitions2.default.easeOut()
-	    }, style, {
-	      color: this.state.hovered ? onColor : offColor
-	    });
-	
-	    return _react2.default.createElement('span', _extends({}, other, {
-	      onMouseLeave: this._handleMouseLeave,
-	      onMouseEnter: this._handleMouseEnter,
-	      style: mergedStyles }));
-	  }
-	});
-	
-	exports.default = FontIcon;
-	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
